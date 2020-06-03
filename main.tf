@@ -39,11 +39,78 @@ data "template_file" "install_consul" {
   }
 }
 
+resource aws_vpc "benchmarking" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
+
+  tags = {
+    Name = "assareh-benchmarking-vpc"
+  }
+}
+
+resource aws_subnet "subnet_a" {
+  vpc_id     = aws_vpc.benchmarking.id
+  cidr_block = "10.0.1.0/24"
+
+  tags = {
+    name = "assareh-benchmarking-subnet_a"
+  }
+}
+
+resource aws_subnet "subnet_b" {
+  vpc_id     = aws_vpc.benchmarking.id
+  cidr_block = "10.0.2.0/24"
+
+  tags = {
+    name = "assareh-benchmarking-subnet_b"
+  }
+}
+
+resource aws_subnet "subnet_c" {
+  vpc_id     = aws_vpc.benchmarking.id
+  cidr_block = "10.0.3.0/24"
+
+  tags = {
+    name = "assareh-benchmarking-subnet_c"
+  }
+}
+
+resource aws_internet_gateway "hashicat" {
+  vpc_id = aws_vpc.benchmarking.id
+
+  tags = {
+    Name = "assareh-internet-gateway"
+  }
+}
+
+resource aws_route_table "hashicat" {
+  vpc_id = aws_vpc.benchmarking.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.hashicat.id
+  }
+}
+
+resource aws_route_table_association "subnet_a" {
+  subnet_id      = aws_subnet.subnet_a.id
+  route_table_id = aws_route_table.hashicat.id
+}
+
+resource aws_route_table_association "subnet_b" {
+  subnet_id      = aws_subnet.subnet_b.id
+  route_table_id = aws_route_table.hashicat.id
+}
+
+resource aws_route_table_association "subnet_c" {
+  subnet_id      = aws_subnet.subnet_c.id
+  route_table_id = aws_route_table.hashicat.id
+}
+
 // We launch Vault into an ASG so that it can properly bring them up for us.
 resource "aws_autoscaling_group" "vault" {
   name                 = aws_launch_configuration.vault.name
   launch_configuration = aws_launch_configuration.vault.name
-  availability_zones   = split(",", var.availability_zones)
 
   #   min_size = "${var.vault_nodes}"
   min_size                  = 1
@@ -51,7 +118,7 @@ resource "aws_autoscaling_group" "vault" {
   desired_capacity          = var.vault_nodes
   health_check_grace_period = 15
   health_check_type         = "EC2"
-  vpc_zone_identifier       = split(",", var.subnets)
+  vpc_zone_identifier       = [aws_subnet.subnet_a.availability_zone, aws_subnet.subnet_b.availability_zone, aws_subnet.subnet_c.availability_zone]
   load_balancers            = [aws_elb.vault.id]
 
   tags = [
@@ -105,13 +172,12 @@ resource "aws_launch_configuration" "vault" {
 resource "aws_autoscaling_group" "consul" {
   name                      = aws_launch_configuration.consul.name
   launch_configuration      = aws_launch_configuration.consul.name
-  availability_zones        = split(",", var.availability_zones)
   min_size                  = var.consul_nodes
   max_size                  = var.consul_nodes
   desired_capacity          = var.consul_nodes
   health_check_grace_period = 15
   health_check_type         = "EC2"
-  vpc_zone_identifier       = split(",", var.subnets)
+  vpc_zone_identifier       = [aws_subnet.subnet_a.availability_zone, aws_subnet.subnet_b.availability_zone, aws_subnet.subnet_c.availability_zone]
   load_balancers            = [aws_elb.consul.id]
 
   tags = [
@@ -210,7 +276,7 @@ data "aws_iam_policy_document" "auto_discover_cluster" {
 resource "aws_security_group" "vault" {
   name        = "${var.vault_name_prefix}-sg"
   description = "Vault servers"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.benchmarking.id
 }
 
 resource "aws_security_group_rule" "vault_ssh" {
@@ -324,7 +390,7 @@ resource "aws_elb" "vault" {
   connection_draining         = true
   connection_draining_timeout = 400
   internal                    = var.elb_internal
-  subnets                     = split(",", var.subnets)
+  subnets                     = [aws_subnet.subnet_a.availability_zone, aws_subnet.subnet_b.availability_zone, aws_subnet.subnet_c.availability_zone]
   security_groups             = [aws_security_group.vault_elb.id]
 
   listener {
@@ -350,7 +416,7 @@ resource "aws_elb" "consul" {
   connection_draining         = true
   connection_draining_timeout = 400
   internal                    = var.elb_internal
-  subnets                     = split(",", var.subnets)
+  subnets                     = [aws_subnet.subnet_a.availability_zone, aws_subnet.subnet_b.availability_zone, aws_subnet.subnet_c.availability_zone]
   security_groups             = [aws_security_group.vault_elb.id]
 
   listener {
@@ -372,7 +438,7 @@ resource "aws_elb" "consul" {
 resource "aws_security_group" "vault_elb" {
   name        = "${var.vault_name_prefix}-elb"
   description = "Vault ELB"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.benchmarking.id
 }
 
 resource "aws_security_group_rule" "vault_elb_http" {

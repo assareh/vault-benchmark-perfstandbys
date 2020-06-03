@@ -5,16 +5,16 @@ unzip_command = "sudo apt-get install -y curl unzip"
 instance_type_vault  = "m5.large"
 instance_type_consul = "m5.large"
 
-key_name = "assareh-ec2"
-vault_name_prefix = "assareh-benchmark-vault"
+key_name           = "assareh-ec2"
+vault_name_prefix  = "assareh-benchmark-vault"
 consul_name_prefix = "assareh-benchmark-consul"
-vpc_id = "vpc-0097d6746d25d62fb"
-subnets = "subnet-0383033a3075d74f7"
+# vpc_id = "vpc-0097d6746d25d62fb"
+# subnets = "subnet-0383033a3075d74f7"
 
 elb_internal = false
-public_ip = true
+public_ip    = true
 
-vault_nodes = "3"
+vault_nodes  = "3"
 consul_nodes = "3"
 
 # This downloads Vault Enterprise by default
@@ -28,4 +28,4 @@ auto_join_tag = "assareh-benchmark-cluster"
 
 # These are only needed for HashiCorp SEs
 owner = "assareh@hashicorp.com"
-ttl = "-1"
+ttl   = "-1"

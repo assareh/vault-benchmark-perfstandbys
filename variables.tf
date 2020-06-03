@@ -151,13 +151,13 @@ variable "consul_nodes" {
   description = "number of Consul instances"
 }
 
-variable "subnets" {
-  description = "list of subnets to launch Vault within"
-}
+# variable "subnets" {
+#   description = "list of subnets to launch Vault within"
+# }
 
-variable "vpc_id" {
-  description = "VPC ID"
-}
+# variable "vpc_id" {
+#   description = "VPC ID"
+# }
 
 variable "owner" {
   description = "value of owner tag on EC2 instances"
