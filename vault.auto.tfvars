@@ -8,11 +8,9 @@ instance_type_consul = "m5.large"
 key_name           = "assareh-ec2"
 vault_name_prefix  = "assareh-benchmark-vault"
 consul_name_prefix = "assareh-benchmark-consul"
-# vpc_id = "vpc-0097d6746d25d62fb"
-# subnets = "subnet-0383033a3075d74f7"
 
-elb_internal = false
-public_ip    = true
+elb_internal = true
+public_ip    = false
 
 vault_nodes  = "3"
 consul_nodes = "3"
