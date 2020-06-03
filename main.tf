@@ -635,3 +635,12 @@ resource "aws_security_group_rule" "vault_elb_benchmark" {
   protocol                 = "-1"
   source_security_group_id = aws_security_group.benchmark.id
 }
+
+resource "aws_security_group_rule" "vault_elb_benchmark_egress" {
+  security_group_id        = aws_security_group.vault_elb.id
+  type                     = "egress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  source_security_group_id = aws_security_group.benchmark.id
+}
