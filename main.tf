@@ -26,13 +26,13 @@ data "aws_route53_zone" "selected" {
   name = "andy.hashidemos.io."
 }
 
-resource "aws_route53_record" "andy-hashidemos-io-CNAME" {
-  zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "vault.${data.aws_route53_zone.selected.name}"
-  type    = "CNAME"
-  records = [aws_elb.vault.dns_name]
-  ttl     = "60"
-}
+# resource "aws_route53_record" "andy-hashidemos-io-CNAME" {
+#   zone_id = data.aws_route53_zone.selected.zone_id
+#   name    = "vault.${data.aws_route53_zone.selected.name}"
+#   type    = "CNAME"
+#   records = [aws_elb.vault.dns_name]
+#   ttl     = "60"
+# }
 
 resource "aws_iam_server_certificate" "elb_cert" {
   name_prefix      = "assareh-cert-"
@@ -507,64 +507,64 @@ resource "aws_security_group_rule" "consul_dns_udp" {
 
 // Launch the ELB that is serving Vault. This has proper health checks
 // to only serve healthy, unsealed Vaults.
-resource "aws_elb" "vault" {
-  name                        = "${var.vault_name_prefix}-elb"
-  connection_draining         = true
-  connection_draining_timeout = 400
-  internal                    = var.elb_internal
-  subnets                     = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
-  security_groups             = [aws_security_group.vault_elb.id]
+# resource "aws_elb" "vault" {
+#   name                        = "${var.vault_name_prefix}-elb"
+#   connection_draining         = true
+#   connection_draining_timeout = 400
+#   internal                    = var.elb_internal
+#   subnets                     = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
+#   security_groups             = [aws_security_group.vault_elb.id]
 
-  listener {
-    instance_port     = 8200
-    instance_protocol = "http"
-    lb_port           = 8200
-    lb_protocol       = "https"
-    #lb_protocol       = "tcp"
-    ssl_certificate_id = aws_iam_server_certificate.elb_cert.arn
-  }
+#   listener {
+#     instance_port     = 8200
+#     instance_protocol = "http"
+#     lb_port           = 8200
+#     lb_protocol       = "https"
+#     #lb_protocol       = "tcp"
+#     ssl_certificate_id = aws_iam_server_certificate.elb_cert.arn
+#   }
 
-  listener {
-    instance_port     = 8200
-    instance_protocol = "tcp"
-    lb_port           = 8210
-    lb_protocol       = "tcp"
-  }
+#   listener {
+#     instance_port     = 8200
+#     instance_protocol = "tcp"
+#     lb_port           = 8210
+#     lb_protocol       = "tcp"
+#   }
 
-  health_check {
-    healthy_threshold   = 2
-    unhealthy_threshold = 3
-    timeout             = 5
-    target              = var.vault_elb_health_check
-    interval            = 15
-  }
-}
+#   health_check {
+#     healthy_threshold   = 2
+#     unhealthy_threshold = 3
+#     timeout             = 5
+#     target              = var.vault_elb_health_check
+#     interval            = 15
+#   }
+# }
 
 // Launch the ELB that is serving Consul. This has proper health checks
 // to only serve healthy, unsealed Consuls.
-resource "aws_elb" "consul" {
-  name                        = "${var.consul_name_prefix}-elb"
-  connection_draining         = true
-  connection_draining_timeout = 400
-  internal                    = var.elb_internal
-  subnets                     = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
-  security_groups             = [aws_security_group.vault_elb.id]
+# resource "aws_elb" "consul" {
+#   name                        = "${var.consul_name_prefix}-elb"
+#   connection_draining         = true
+#   connection_draining_timeout = 400
+#   internal                    = var.elb_internal
+#   subnets                     = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
+#   security_groups             = [aws_security_group.vault_elb.id]
 
-  listener {
-    instance_port     = 8500
-    instance_protocol = "tcp"
-    lb_port           = 8500
-    lb_protocol       = "tcp"
-  }
+#   listener {
+#     instance_port     = 8500
+#     instance_protocol = "tcp"
+#     lb_port           = 8500
+#     lb_protocol       = "tcp"
+#   }
 
-  health_check {
-    healthy_threshold   = 2
-    unhealthy_threshold = 3
-    timeout             = 5
-    target              = var.consul_elb_health_check
-    interval            = 15
-  }
-}
+#   health_check {
+#     healthy_threshold   = 2
+#     unhealthy_threshold = 3
+#     timeout             = 5
+#     target              = var.consul_elb_health_check
+#     interval            = 15
+#   }
+# }
 
 resource "aws_security_group" "vault_elb" {
   name        = "${var.vault_name_prefix}-elb"
