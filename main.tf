@@ -36,7 +36,7 @@ resource "aws_route53_record" "andy-hashidemos-io-CNAME" {
 resource "aws_iam_server_certificate" "elb_cert" {
   name_prefix       = "assareh-cert-"
   certificate_body  = acme_certificate.certificate.certificate_pem
-  certificate_chain = "${acme_certificate.certificate.issuer_pem}+${acme_certificate.certificate.certificate_pem}"
+  #certificate_chain = "${acme_certificate.certificate.issuer_pem}+${acme_certificate.certificate.certificate_pem}"
   private_key       = acme_certificate.certificate.private_key_pem
 
   lifecycle {
