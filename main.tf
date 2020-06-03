@@ -573,6 +573,15 @@ resource "aws_security_group_rule" "vault_elb_http" {
   cidr_blocks       = ["76.93.151.110/32"]
 }
 
+resource "aws_security_group_rule" "vault_elb_http_3" {
+  security_group_id        = aws_security_group.vault_elb.id
+  type                     = "ingress"
+  from_port                = 8200
+  to_port                  = 8200
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.benchmark.id
+}
+
 resource "aws_security_group_rule" "vault_elb_http_2" {
   security_group_id        = aws_security_group.vault_elb.id
   type                     = "ingress"
@@ -592,6 +601,15 @@ resource "aws_security_group_rule" "consul_elb_http" {
 }
 
 resource "aws_security_group_rule" "vault_elb_egress_to_vault" {
+  security_group_id        = aws_security_group.vault_elb.id
+  type                     = "egress"
+  from_port                = 8200
+  to_port                  = 8200
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.vault.id
+}
+
+resource "aws_security_group_rule" "vault_elb_egress_to_benchmark" {
   security_group_id        = aws_security_group.vault_elb.id
   type                     = "egress"
   from_port                = 8200
