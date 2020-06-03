@@ -121,7 +121,7 @@ resource "aws_autoscaling_group" "vault" {
   desired_capacity          = var.vault_nodes
   health_check_grace_period = 15
   health_check_type         = "EC2"
-  vpc_zone_identifier       = [aws_subnet.subnet_a.availability_zone, aws_subnet.subnet_b.availability_zone, aws_subnet.subnet_c.availability_zone]
+  vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
   load_balancers            = [aws_elb.vault.id]
 
   tags = [
@@ -180,7 +180,7 @@ resource "aws_autoscaling_group" "consul" {
   desired_capacity          = var.consul_nodes
   health_check_grace_period = 15
   health_check_type         = "EC2"
-  vpc_zone_identifier       = [aws_subnet.subnet_a.availability_zone, aws_subnet.subnet_b.availability_zone, aws_subnet.subnet_c.availability_zone]
+  vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
   load_balancers            = [aws_elb.consul.id]
 
   tags = [
