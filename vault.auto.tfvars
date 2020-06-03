@@ -18,7 +18,7 @@ vault_nodes  = "3"
 consul_nodes = "3"
 
 # This downloads Vault Enterprise by default
-vault_download_url = "https://releases.hashicorp.com/vault/1.4.2+ent/vault_1.4.2+ent_linux_arm64.zip"
+vault_download_url = "https://releases.hashicorp.com/vault/1.4.2+ent/vault_1.4.2+ent_linux_amd64.zip"
 
 # This downloads Consul Enterprise by default
 consul_download_url = "https://releases.hashicorp.com/consul/1.7.3/consul_1.7.3_linux_amd64.zip"
