@@ -211,7 +211,7 @@ resource aws_instance "hashicat" {
   key_name                    = var.key_name
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.subnet_d.id
-  vpc_security_group_ids      = [aws_security_group.hashicat.id]
+  vpc_security_group_ids      = [aws_security_group.vault.id]
 
   tags = {
     Name  = "assareh-hashicat-instance",
