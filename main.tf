@@ -528,8 +528,8 @@ resource "aws_elb" "vault" {
     instance_port     = 8200
     instance_protocol = "tcp"
     lb_port           = 8200
-    #lb_protocol       = "https"
-    lb_protocol       = "tcp"
+    lb_protocol       = "https"
+    #lb_protocol       = "tcp"
     #ssl_certificate_id = aws_iam_server_certificate.elb_cert.arn
   }
 
