@@ -609,15 +609,6 @@ resource "aws_security_group_rule" "vault_elb_egress_to_vault" {
   source_security_group_id = aws_security_group.vault.id
 }
 
-resource "aws_security_group_rule" "vault_elb_egress_to_benchmark" {
-  security_group_id        = aws_security_group.vault_elb.id
-  type                     = "egress"
-  from_port                = 8200
-  to_port                  = 8200
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.vault.id
-}
-
 resource "aws_security_group_rule" "vault_elb_egress_to_consul" {
   security_group_id        = aws_security_group.vault_elb.id
   type                     = "egress"
