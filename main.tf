@@ -49,8 +49,9 @@ resource aws_vpc "benchmarking" {
 }
 
 resource aws_subnet "subnet_a" {
-  vpc_id     = aws_vpc.benchmarking.id
-  cidr_block = "10.0.1.0/24"
+  vpc_id            = aws_vpc.benchmarking.id
+  availability_zone = "us-west-2a"
+  cidr_block        = "10.0.1.0/24"
 
   tags = {
     name = "assareh-benchmarking-subnet_a"
@@ -58,8 +59,9 @@ resource aws_subnet "subnet_a" {
 }
 
 resource aws_subnet "subnet_b" {
-  vpc_id     = aws_vpc.benchmarking.id
-  cidr_block = "10.0.2.0/24"
+  vpc_id            = aws_vpc.benchmarking.id
+  availability_zone = "us-west-2b"
+  cidr_block        = "10.0.2.0/24"
 
   tags = {
     name = "assareh-benchmarking-subnet_b"
@@ -67,8 +69,9 @@ resource aws_subnet "subnet_b" {
 }
 
 resource aws_subnet "subnet_c" {
-  vpc_id     = aws_vpc.benchmarking.id
-  cidr_block = "10.0.3.0/24"
+  vpc_id            = aws_vpc.benchmarking.id
+  availability_zone = "us-west-2c"
+  cidr_block        = "10.0.3.0/24"
 
   tags = {
     name = "assareh-benchmarking-subnet_c"
