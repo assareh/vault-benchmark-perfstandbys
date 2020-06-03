@@ -197,6 +197,15 @@ resource aws_security_group "benchmark" {
   }
 }
 
+resource "aws_security_group_rule" "benchmark_vault_all" {
+  security_group_id        = aws_security_group.benchmark.id
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  source_security_group_id = aws_security_group.vault.id
+}
+
 resource aws_instance "benchmark" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type_vault
