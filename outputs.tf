@@ -16,3 +16,6 @@ output "vault_elb_security_group" {
   value = aws_security_group.vault_elb.id
 }
 
+output "azs" {
+  value = aws_autoscaling_group.vault.availability_zones
+}
