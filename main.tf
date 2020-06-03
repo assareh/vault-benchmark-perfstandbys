@@ -197,7 +197,7 @@ resource aws_security_group "benchmark" {
   }
 }
 
-resource "aws_security_group_rule" "benchmark_vault_all" {
+resource "aws_security_group_rule" "benchmark_vault_elb" {
   security_group_id        = aws_security_group.benchmark.id
   type                     = "ingress"
   from_port                = 0
@@ -627,3 +627,11 @@ resource "aws_security_group_rule" "vault_elb_egress_to_consul" {
   source_security_group_id = aws_security_group.vault.id
 }
 
+resource "aws_security_group_rule" "vault_elb_benchmark" {
+  security_group_id        = aws_security_group.vault_elb.id
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  source_security_group_id = aws_security_group.benchmark.id
+}
