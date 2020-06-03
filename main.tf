@@ -1,3 +1,49 @@
+provider "acme" {
+  server_url = "https://acme-staging-v02.api.letsencrypt.org/directory"
+}
+
+resource "tls_private_key" "private_key" {
+  algorithm = "RSA"
+}
+
+resource "acme_registration" "reg" {
+  account_key_pem = tls_private_key.private_key.private_key_pem
+  email_address   = "nobody@example.com"
+}
+
+resource "acme_certificate" "certificate" {
+  account_key_pem           = acme_registration.reg.account_key_pem
+  common_name               = data.aws_route53_zone.selected.name
+  subject_alternative_names = [data.aws_route53_zone.selected.name]
+
+  dns_challenge {
+    provider = "route53"
+  }
+}
+
+data "aws_route53_zone" "selected" {
+  name = "andy.hashidemos.io."
+}
+
+resource "aws_route53_record" "andy-hashidemos-io-CNAME" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = data.aws_route53_zone.selected.name
+  type    = "CNAME"
+  records = [aws_elb.vault.dns_name]
+  ttl     = "60"
+}
+
+resource "aws_iam_server_certificate" "elb_cert" {
+  name_prefix       = "assareh-cert-"
+  certificate_body  = acme_certificate.certificate.certificate_pem
+  certificate_chain = "${acme_certificate.certificate.certificate_pem}+${acme_certificate.certificate.issuer_pem}"
+  private_key       = acme_certificate.certificate.private_key_pem
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 data "aws_ami" "ubuntu" {
   most_recent = true
 
@@ -482,7 +528,8 @@ resource "aws_elb" "vault" {
     instance_port     = 8200
     instance_protocol = "tcp"
     lb_port           = 8200
-    lb_protocol       = "tcp"
+    lb_protocol       = "https"
+    ssl_certificate_id = aws_iam_server_certificate.elb_cert.arn
   }
 
   health_check {
