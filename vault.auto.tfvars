@@ -11,8 +11,8 @@ consul_name_prefix = "assareh-benchmark-consul"
 vpc_id = "vpc-0097d6746d25d62fb"
 subnets = "subnet-0383033a3075d74f7"
 
-elb_internal = true
-public_ip = false
+elb_internal = false
+public_ip = true
 
 vault_nodes = "3"
 consul_nodes = "3"
