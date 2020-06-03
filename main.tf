@@ -159,9 +159,9 @@ resource aws_instance "hashicat" {
   vpc_security_group_ids      = [aws_security_group.hashicat.id]
 
   tags = {
-    Name = "assareh-hashicat-instance",
+    Name  = "assareh-hashicat-instance",
     owner = var.owner,
-    ttl = var.ttl
+    ttl   = var.ttl
   }
 }
 
@@ -343,7 +343,25 @@ resource "aws_security_group_rule" "vault_ssh" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
+  cidr_blocks       = ["76.93.151.110/32"]
+}
+
+resource "aws_security_group_rule" "vault_external_egress_star" {
+  security_group_id = aws_security_group.vault.id
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "vault_internal_icmp" {
+  security_group_id        = aws_security_group.vault.id
+  type                     = "ingress"
+  from_port                = 8
+  to_port                  = 0
+  protocol                 = "icmp"
+  source_security_group_id = aws_security_group.vault.id
 }
 
 resource "aws_security_group_rule" "vault_external_egress" {
@@ -505,7 +523,7 @@ resource "aws_security_group_rule" "vault_elb_http" {
   from_port         = 8200
   to_port           = 8200
   protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = ["76.93.151.110/32"]
 }
 
 resource "aws_security_group_rule" "consul_elb_http" {
@@ -514,7 +532,7 @@ resource "aws_security_group_rule" "consul_elb_http" {
   from_port         = 8500
   to_port           = 8500
   protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = ["76.93.151.110/32"]
 }
 
 resource "aws_security_group_rule" "vault_elb_egress_to_vault" {
