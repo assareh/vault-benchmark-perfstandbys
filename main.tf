@@ -135,7 +135,7 @@ resource aws_subnet "subnet_d" {
   }
 }
 
-resource aws_internet_gateway "hashicat" {
+resource aws_internet_gateway "benchmark" {
   vpc_id = aws_vpc.benchmarking.id
 
   tags = {
@@ -143,79 +143,70 @@ resource aws_internet_gateway "hashicat" {
   }
 }
 
-resource aws_route_table "hashicat" {
+resource aws_route_table "benchmark" {
   vpc_id = aws_vpc.benchmarking.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.hashicat.id
+    gateway_id = aws_internet_gateway.benchmark.id
   }
 }
 
 resource aws_route_table_association "subnet_a" {
   subnet_id      = aws_subnet.subnet_a.id
-  route_table_id = aws_route_table.hashicat.id
+  route_table_id = aws_route_table.benchmark.id
 }
 
 resource aws_route_table_association "subnet_b" {
   subnet_id      = aws_subnet.subnet_b.id
-  route_table_id = aws_route_table.hashicat.id
+  route_table_id = aws_route_table.benchmark.id
 }
 
 resource aws_route_table_association "subnet_c" {
   subnet_id      = aws_subnet.subnet_c.id
-  route_table_id = aws_route_table.hashicat.id
+  route_table_id = aws_route_table.benchmark.id
 }
 
 resource aws_route_table_association "subnet_d" {
   subnet_id      = aws_subnet.subnet_d.id
-  route_table_id = aws_route_table.hashicat.id
+  route_table_id = aws_route_table.benchmark.id
 }
 
-# resource aws_security_group "hashicat" {
-#   name = "assareh-security-group"
+resource aws_security_group "benchmark" {
+  name = "assareh-security-group"
 
-#   vpc_id = aws_vpc.benchmarking.id
+  vpc_id = aws_vpc.benchmarking.id
 
-#   ingress {
-#     from_port   = 22
-#     to_port     = 22
-#     protocol    = "tcp"
-#     cidr_blocks = ["76.93.151.110/32"]
-#   }
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["76.93.151.110/32"]
+  }
 
-#   egress {
-#     from_port       = 0
-#     to_port         = 0
-#     protocol        = "-1"
-#     cidr_blocks     = ["0.0.0.0/0"]
-#     prefix_list_ids = []
-#   }
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+    prefix_list_ids = []
+  }
 
-#   tags = {
-#     Name = "assareh-security-group"
-#   }
-# }
+  tags = {
+    Name = "assareh-security-group"
+  }
+}
 
-# resource "aws_security_group_rule" "benchmark_internal_icmp" {
-#   security_group_id        = aws_security_group.hashicat.id
-#   type                     = "ingress"
-#   from_port                = 8
-#   to_port                  = 0
-#   protocol                 = "icmp"
-#   source_security_group_id = aws_security_group.vault.id
-# }
-
-resource aws_instance "hashicat" {
+resource aws_instance "benchmark" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type_vault
   key_name                    = var.key_name
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.subnet_d.id
-  vpc_security_group_ids      = [aws_security_group.vault.id]
+  vpc_security_group_ids      = [aws_security_group.benchmark.id]
 
   tags = {
-    Name  = "assareh-hashicat-instance",
+    Name  = "assareh-benchmark-instance",
     owner = var.owner,
     ttl   = var.ttl
   }
