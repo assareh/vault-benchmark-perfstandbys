@@ -516,6 +516,13 @@ resource "aws_elb" "vault" {
     ssl_certificate_id = aws_iam_server_certificate.elb_cert.arn
   }
 
+  listener {
+    instance_port     = 8200
+    instance_protocol = "tcp"
+    lb_port           = 8210
+    lb_protocol       = "tcp"
+  }
+
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 3
@@ -564,6 +571,15 @@ resource "aws_security_group_rule" "vault_elb_http" {
   to_port           = 8200
   protocol          = "tcp"
   cidr_blocks       = ["76.93.151.110/32"]
+}
+
+resource "aws_security_group_rule" "vault_elb_http_2" {
+  security_group_id        = aws_security_group.vault_elb.id
+  type                     = "ingress"
+  from_port                = 8210
+  to_port                  = 8210
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.benchmark.id
 }
 
 resource "aws_security_group_rule" "consul_elb_http" {
