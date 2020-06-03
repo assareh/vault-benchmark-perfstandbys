@@ -166,46 +166,46 @@ resource aws_instance "hashicat" {
 }
 
 // We launch Vault into an ASG so that it can properly bring them up for us.
-resource "aws_autoscaling_group" "vault" {
-  name                 = aws_launch_configuration.vault.name
-  launch_configuration = aws_launch_configuration.vault.name
+# resource "aws_autoscaling_group" "vault" {
+#   name                 = aws_launch_configuration.vault.name
+#   launch_configuration = aws_launch_configuration.vault.name
 
-  #   min_size = "${var.vault_nodes}"
-  min_size                  = 1
-  max_size                  = var.vault_nodes
-  desired_capacity          = var.vault_nodes
-  health_check_grace_period = 15
-  health_check_type         = "EC2"
-  vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
-  load_balancers            = [aws_elb.vault.id]
+#   #   min_size = "${var.vault_nodes}"
+#   min_size                  = 1
+#   max_size                  = var.vault_nodes
+#   desired_capacity          = var.vault_nodes
+#   health_check_grace_period = 15
+#   health_check_type         = "EC2"
+#   vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
+#   load_balancers            = [aws_elb.vault.id]
 
-  tags = [
-    {
-      key                 = "Name"
-      value               = var.vault_name_prefix
-      propagate_at_launch = true
-    },
-    {
-      key                 = "ConsulAutoJoin"
-      value               = var.auto_join_tag
-      propagate_at_launch = true
-    },
-    {
-      key                 = "owner"
-      value               = var.owner
-      propagate_at_launch = true
-    },
-    {
-      key                 = "ttl"
-      value               = var.ttl
-      propagate_at_launch = true
-    },
-  ]
+#   tags = [
+#     {
+#       key                 = "Name"
+#       value               = var.vault_name_prefix
+#       propagate_at_launch = true
+#     },
+#     {
+#       key                 = "ConsulAutoJoin"
+#       value               = var.auto_join_tag
+#       propagate_at_launch = true
+#     },
+#     {
+#       key                 = "owner"
+#       value               = var.owner
+#       propagate_at_launch = true
+#     },
+#     {
+#       key                 = "ttl"
+#       value               = var.ttl
+#       propagate_at_launch = true
+#     },
+#   ]
 
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
 resource "aws_launch_configuration" "vault" {
   name_prefix                 = var.vault_name_prefix
@@ -227,46 +227,46 @@ resource "aws_launch_configuration" "vault" {
   }
 }
 
-resource "aws_autoscaling_group" "consul" {
-  name                      = aws_launch_configuration.consul.name
-  launch_configuration      = aws_launch_configuration.consul.name
-  min_size                  = var.consul_nodes
-  max_size                  = var.consul_nodes
-  desired_capacity          = var.consul_nodes
-  health_check_grace_period = 15
-  health_check_type         = "EC2"
-  vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
-  load_balancers            = [aws_elb.consul.id]
+# resource "aws_autoscaling_group" "consul" {
+#   name                      = aws_launch_configuration.consul.name
+#   launch_configuration      = aws_launch_configuration.consul.name
+#   min_size                  = var.consul_nodes
+#   max_size                  = var.consul_nodes
+#   desired_capacity          = var.consul_nodes
+#   health_check_grace_period = 15
+#   health_check_type         = "EC2"
+#   vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
+#   load_balancers            = [aws_elb.consul.id]
 
-  tags = [
-    {
-      key                 = "Name"
-      value               = var.consul_name_prefix
-      propagate_at_launch = true
-    },
-    {
-      key                 = "ConsulAutoJoin"
-      value               = var.auto_join_tag
-      propagate_at_launch = true
-    },
-    {
-      key                 = "owner"
-      value               = var.owner
-      propagate_at_launch = true
-    },
-    {
-      key                 = "ttl"
-      value               = var.ttl
-      propagate_at_launch = true
-    },
-  ]
+#   tags = [
+#     {
+#       key                 = "Name"
+#       value               = var.consul_name_prefix
+#       propagate_at_launch = true
+#     },
+#     {
+#       key                 = "ConsulAutoJoin"
+#       value               = var.auto_join_tag
+#       propagate_at_launch = true
+#     },
+#     {
+#       key                 = "owner"
+#       value               = var.owner
+#       propagate_at_launch = true
+#     },
+#     {
+#       key                 = "ttl"
+#       value               = var.ttl
+#       propagate_at_launch = true
+#     },
+#   ]
 
-  lifecycle {
-    create_before_destroy = true
-  }
+#   lifecycle {
+#     create_before_destroy = true
+#   }
 
-  depends_on = [aws_autoscaling_group.vault]
-}
+#   depends_on = [aws_autoscaling_group.vault]
+# }
 
 resource "aws_launch_configuration" "consul" {
   name_prefix                 = var.consul_name_prefix
