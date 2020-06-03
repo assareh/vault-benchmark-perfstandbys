@@ -171,39 +171,39 @@ resource aws_route_table_association "subnet_d" {
   route_table_id = aws_route_table.hashicat.id
 }
 
-resource aws_security_group "hashicat" {
-  name = "assareh-security-group"
+# resource aws_security_group "hashicat" {
+#   name = "assareh-security-group"
 
-  vpc_id = aws_vpc.benchmarking.id
+#   vpc_id = aws_vpc.benchmarking.id
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["76.93.151.110/32"]
-  }
+#   ingress {
+#     from_port   = 22
+#     to_port     = 22
+#     protocol    = "tcp"
+#     cidr_blocks = ["76.93.151.110/32"]
+#   }
 
-  egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
-    prefix_list_ids = []
-  }
+#   egress {
+#     from_port       = 0
+#     to_port         = 0
+#     protocol        = "-1"
+#     cidr_blocks     = ["0.0.0.0/0"]
+#     prefix_list_ids = []
+#   }
 
-  tags = {
-    Name = "assareh-security-group"
-  }
-}
+#   tags = {
+#     Name = "assareh-security-group"
+#   }
+# }
 
-resource "aws_security_group_rule" "benchmark_internal_icmp" {
-  security_group_id        = aws_security_group.hashicat.id
-  type                     = "ingress"
-  from_port                = 8
-  to_port                  = 0
-  protocol                 = "icmp"
-  source_security_group_id = aws_security_group.vault.id
-}
+# resource "aws_security_group_rule" "benchmark_internal_icmp" {
+#   security_group_id        = aws_security_group.hashicat.id
+#   type                     = "ingress"
+#   from_port                = 8
+#   to_port                  = 0
+#   protocol                 = "icmp"
+#   source_security_group_id = aws_security_group.vault.id
+# }
 
 resource aws_instance "hashicat" {
   ami                         = data.aws_ami.ubuntu.id
@@ -419,14 +419,14 @@ resource "aws_security_group_rule" "vault_internal_icmp" {
   source_security_group_id = aws_security_group.vault.id
 }
 
-resource "aws_security_group_rule" "vault_external_egress" {
-  security_group_id = aws_security_group.vault.id
-  type              = "egress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-}
+# resource "aws_security_group_rule" "vault_external_egress" {
+#   security_group_id = aws_security_group.vault.id
+#   type              = "egress"
+#   from_port         = 443
+#   to_port           = 443
+#   protocol          = "tcp"
+#   cidr_blocks       = ["0.0.0.0/0"]
+# }
 
 resource "aws_security_group_rule" "vault_internal_egress" {
   security_group_id        = aws_security_group.vault.id
