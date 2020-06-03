@@ -15,3 +15,11 @@ output "vault_security_group" {
 output "vault_elb_security_group" {
   value = aws_security_group.vault_elb.id
 }
+
+output "vault_template" {
+  value = data.template_file.install_vault.rendered
+}
+
+output "consul_template" {
+  value = data.template_file.install_consul.rendered
+}
