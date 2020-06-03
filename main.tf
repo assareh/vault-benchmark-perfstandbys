@@ -221,46 +221,46 @@ resource aws_instance "benchmark" {
 }
 
 // We launch Vault into an ASG so that it can properly bring them up for us.
-# resource "aws_autoscaling_group" "vault" {
-#   name                 = aws_launch_configuration.vault.name
-#   launch_configuration = aws_launch_configuration.vault.name
+resource "aws_autoscaling_group" "vault" {
+  name                 = aws_launch_configuration.vault.name
+  launch_configuration = aws_launch_configuration.vault.name
 
-#   #   min_size = "${var.vault_nodes}"
-#   min_size                  = 1
-#   max_size                  = var.vault_nodes
-#   desired_capacity          = var.vault_nodes
-#   health_check_grace_period = 15
-#   health_check_type         = "EC2"
-#   vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
-#   # load_balancers            = [aws_elb.vault.id]
+  #   min_size = "${var.vault_nodes}"
+  min_size                  = 1
+  max_size                  = var.vault_nodes
+  desired_capacity          = var.vault_nodes
+  health_check_grace_period = 15
+  health_check_type         = "EC2"
+  vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
+  # load_balancers            = [aws_elb.vault.id]
 
-#   tags = [
-#     {
-#       key                 = "Name"
-#       value               = var.vault_name_prefix
-#       propagate_at_launch = true
-#     },
-#     {
-#       key                 = "ConsulAutoJoin"
-#       value               = var.auto_join_tag
-#       propagate_at_launch = true
-#     },
-#     {
-#       key                 = "owner"
-#       value               = var.owner
-#       propagate_at_launch = true
-#     },
-#     {
-#       key                 = "ttl"
-#       value               = var.ttl
-#       propagate_at_launch = true
-#     },
-#   ]
+  tags = [
+    {
+      key                 = "Name"
+      value               = var.vault_name_prefix
+      propagate_at_launch = true
+    },
+    {
+      key                 = "ConsulAutoJoin"
+      value               = var.auto_join_tag
+      propagate_at_launch = true
+    },
+    {
+      key                 = "owner"
+      value               = var.owner
+      propagate_at_launch = true
+    },
+    {
+      key                 = "ttl"
+      value               = var.ttl
+      propagate_at_launch = true
+    },
+  ]
 
-#   lifecycle {
-#     create_before_destroy = true
-#   }
-# }
+  lifecycle {
+    create_before_destroy = true
+  }
+}
 
 resource "aws_launch_configuration" "vault" {
   name_prefix                 = var.vault_name_prefix
@@ -282,46 +282,46 @@ resource "aws_launch_configuration" "vault" {
   }
 }
 
-# resource "aws_autoscaling_group" "consul" {
-#   name                      = aws_launch_configuration.consul.name
-#   launch_configuration      = aws_launch_configuration.consul.name
-#   min_size                  = var.consul_nodes
-#   max_size                  = var.consul_nodes
-#   desired_capacity          = var.consul_nodes
-#   health_check_grace_period = 15
-#   health_check_type         = "EC2"
-#   vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
-#   # load_balancers            = [aws_elb.consul.id]
+resource "aws_autoscaling_group" "consul" {
+  name                      = aws_launch_configuration.consul.name
+  launch_configuration      = aws_launch_configuration.consul.name
+  min_size                  = var.consul_nodes
+  max_size                  = var.consul_nodes
+  desired_capacity          = var.consul_nodes
+  health_check_grace_period = 15
+  health_check_type         = "EC2"
+  vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
+  # load_balancers            = [aws_elb.consul.id]
 
-#   tags = [
-#     {
-#       key                 = "Name"
-#       value               = var.consul_name_prefix
-#       propagate_at_launch = true
-#     },
-#     {
-#       key                 = "ConsulAutoJoin"
-#       value               = var.auto_join_tag
-#       propagate_at_launch = true
-#     },
-#     {
-#       key                 = "owner"
-#       value               = var.owner
-#       propagate_at_launch = true
-#     },
-#     {
-#       key                 = "ttl"
-#       value               = var.ttl
-#       propagate_at_launch = true
-#     },
-#   ]
+  tags = [
+    {
+      key                 = "Name"
+      value               = var.consul_name_prefix
+      propagate_at_launch = true
+    },
+    {
+      key                 = "ConsulAutoJoin"
+      value               = var.auto_join_tag
+      propagate_at_launch = true
+    },
+    {
+      key                 = "owner"
+      value               = var.owner
+      propagate_at_launch = true
+    },
+    {
+      key                 = "ttl"
+      value               = var.ttl
+      propagate_at_launch = true
+    },
+  ]
 
-#   lifecycle {
-#     create_before_destroy = true
-#   }
+  lifecycle {
+    create_before_destroy = true
+  }
 
-#   depends_on = [aws_autoscaling_group.vault]
-# }
+  depends_on = [aws_autoscaling_group.vault]
+}
 
 resource "aws_launch_configuration" "consul" {
   name_prefix                 = var.consul_name_prefix
@@ -507,64 +507,64 @@ resource "aws_security_group_rule" "consul_dns_udp" {
 
 // Launch the ELB that is serving Vault. This has proper health checks
 // to only serve healthy, unsealed Vaults.
-# resource "aws_elb" "vault" {
-#   name                        = "${var.vault_name_prefix}-elb"
-#   connection_draining         = true
-#   connection_draining_timeout = 400
-#   internal                    = var.elb_internal
-#   subnets                     = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
-#   security_groups             = [aws_security_group.vault_elb.id]
+resource "aws_elb" "vault" {
+  name                        = "${var.vault_name_prefix}-elb"
+  connection_draining         = true
+  connection_draining_timeout = 400
+  internal                    = var.elb_internal
+  subnets                     = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
+  security_groups             = [aws_security_group.vault_elb.id]
 
-#   listener {
-#     instance_port     = 8200
-#     instance_protocol = "http"
-#     lb_port           = 8200
-#     lb_protocol       = "https"
-#     #lb_protocol       = "tcp"
-#     ssl_certificate_id = aws_iam_server_certificate.elb_cert.arn
-#   }
+  listener {
+    instance_port     = 8200
+    instance_protocol = "http"
+    lb_port           = 8200
+    lb_protocol       = "https"
+    #lb_protocol       = "tcp"
+    ssl_certificate_id = aws_iam_server_certificate.elb_cert.arn
+  }
 
-#   listener {
-#     instance_port     = 8200
-#     instance_protocol = "tcp"
-#     lb_port           = 8210
-#     lb_protocol       = "tcp"
-#   }
+  listener {
+    instance_port     = 8200
+    instance_protocol = "tcp"
+    lb_port           = 8210
+    lb_protocol       = "tcp"
+  }
 
-#   health_check {
-#     healthy_threshold   = 2
-#     unhealthy_threshold = 3
-#     timeout             = 5
-#     target              = var.vault_elb_health_check
-#     interval            = 15
-#   }
-# }
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    timeout             = 5
+    target              = var.vault_elb_health_check
+    interval            = 15
+  }
+}
 
 // Launch the ELB that is serving Consul. This has proper health checks
 // to only serve healthy, unsealed Consuls.
-# resource "aws_elb" "consul" {
-#   name                        = "${var.consul_name_prefix}-elb"
-#   connection_draining         = true
-#   connection_draining_timeout = 400
-#   internal                    = var.elb_internal
-#   subnets                     = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
-#   security_groups             = [aws_security_group.vault_elb.id]
+resource "aws_elb" "consul" {
+  name                        = "${var.consul_name_prefix}-elb"
+  connection_draining         = true
+  connection_draining_timeout = 400
+  internal                    = var.elb_internal
+  subnets                     = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
+  security_groups             = [aws_security_group.vault_elb.id]
 
-#   listener {
-#     instance_port     = 8500
-#     instance_protocol = "tcp"
-#     lb_port           = 8500
-#     lb_protocol       = "tcp"
-#   }
+  listener {
+    instance_port     = 8500
+    instance_protocol = "tcp"
+    lb_port           = 8500
+    lb_protocol       = "tcp"
+  }
 
-#   health_check {
-#     healthy_threshold   = 2
-#     unhealthy_threshold = 3
-#     timeout             = 5
-#     target              = var.consul_elb_health_check
-#     interval            = 15
-#   }
-# }
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    timeout             = 5
+    target              = var.consul_elb_health_check
+    interval            = 15
+  }
+}
 
 resource "aws_security_group" "vault_elb" {
   name        = "${var.vault_name_prefix}-elb"
