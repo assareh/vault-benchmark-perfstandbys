@@ -2,19 +2,17 @@
 #For RHEL, set unzip_command to "sudo yum -y install unzip"
 unzip_command = "sudo apt-get install -y curl unzip"
 
-# Ubuntu would be ami-759bc50a or ami-059eeca93cf09eebd
-ami = "ami-6871a115" # RHEL 7.5
 instance_type_vault  = "t2.micro"
 instance_type_consul = "t2.micro"
 
 key_name = "assareh-ec2"
 vault_name_prefix = "assareh-benchmark-vault"
 consul_name_prefix = "assareh-benchmark-consul"
-vpc_id = "vpc-03e9af5aa624e650c"
-subnets = "subnet-06b2354575ce443a7"
+vpc_id = "vpc-0097d6746d25d62fb"
+subnets = "subnet-0383033a3075d74f7"
 
-elb_internal = false
-public_ip = true
+elb_internal = true
+public_ip = false
 
 vault_nodes = "3"
 consul_nodes = "3"
