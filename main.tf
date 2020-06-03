@@ -83,7 +83,7 @@ resource "aws_autoscaling_group" "vault" {
 
 resource "aws_launch_configuration" "vault" {
     name_prefix = "${var.vault_name_prefix}"
-    image_id = "${var.ami}"
+    image_id = data.aws_ami.ubuntu
     instance_type = "${var.instance_type_vault}"
     key_name = "${var.key_name}"
     security_groups = ["${aws_security_group.vault.id}"]
@@ -145,7 +145,7 @@ resource "aws_autoscaling_group" "consul" {
 
 resource "aws_launch_configuration" "consul" {
     name_prefix = "${var.consul_name_prefix}"
-    image_id = "${var.ami}"
+    image_id = data.aws_ami.ubuntu
     instance_type = "${var.instance_type_consul}"
     key_name = "${var.key_name}"
     security_groups = ["${aws_security_group.vault.id}"]
