@@ -12,7 +12,7 @@ resource "acme_registration" "reg" {
 }
 
 resource "acme_certificate" "certificate" {
-  account_key_pem           = acme_registration.reg.account_key_pem
+  account_key_pem = acme_registration.reg.account_key_pem
   #common_name               = trimsuffix(aws_route53_record.andy-hashidemos-io-CNAME.name, ".")
   common_name = "vault.andy.hashidemos.io" # workaround to address the cycle issue, figure this out
   # subject_alternative_names = [aws_elb.vault.dns_name]
@@ -35,10 +35,10 @@ data "aws_route53_zone" "selected" {
 # }
 
 resource "aws_iam_server_certificate" "elb_cert" {
-  name_prefix       = "assareh-cert-"
-  certificate_body  = acme_certificate.certificate.certificate_pem
+  name_prefix      = "assareh-cert-"
+  certificate_body = acme_certificate.certificate.certificate_pem
   #certificate_chain = "${acme_certificate.certificate.issuer_pem}+${acme_certificate.certificate.certificate_pem}"
-  private_key       = acme_certificate.certificate.private_key_pem
+  private_key = acme_certificate.certificate.private_key_pem
 
   lifecycle {
     create_before_destroy = true
@@ -86,54 +86,54 @@ data "template_file" "install_consul" {
   }
 }
 
-resource aws_vpc "benchmarking" {
-  cidr_block           = "10.0.0.0/16"
-  enable_dns_hostnames = true
+# resource aws_vpc "benchmarking" {
+#   cidr_block           = "10.0.0.0/16"
+#   enable_dns_hostnames = true
 
-  tags = {
-    Name = "assareh-benchmarking-vpc"
-  }
-}
+#   tags = {
+#     Name = "assareh-benchmarking-vpc"
+#   }
+# }
 
-resource aws_subnet "subnet_a" {
-  vpc_id            = aws_vpc.benchmarking.id
-  availability_zone = "us-west-2a"
-  cidr_block        = "10.0.1.0/24"
+# resource aws_subnet "subnet_a" {
+#   vpc_id            = aws_vpc.benchmarking.id
+#   availability_zone = "us-west-2a"
+#   cidr_block        = "10.0.1.0/24"
 
-  tags = {
-    name = "assareh-benchmarking-subnet_a"
-  }
-}
+#   tags = {
+#     name = "assareh-benchmarking-subnet_a"
+#   }
+# }
 
-resource aws_subnet "subnet_b" {
-  vpc_id            = aws_vpc.benchmarking.id
-  availability_zone = "us-west-2b"
-  cidr_block        = "10.0.2.0/24"
+# resource aws_subnet "subnet_b" {
+#   vpc_id            = aws_vpc.benchmarking.id
+#   availability_zone = "us-west-2b"
+#   cidr_block        = "10.0.2.0/24"
 
-  tags = {
-    name = "assareh-benchmarking-subnet_b"
-  }
-}
+#   tags = {
+#     name = "assareh-benchmarking-subnet_b"
+#   }
+# }
 
-resource aws_subnet "subnet_c" {
-  vpc_id            = aws_vpc.benchmarking.id
-  availability_zone = "us-west-2c"
-  cidr_block        = "10.0.3.0/24"
+# resource aws_subnet "subnet_c" {
+#   vpc_id            = aws_vpc.benchmarking.id
+#   availability_zone = "us-west-2c"
+#   cidr_block        = "10.0.3.0/24"
 
-  tags = {
-    name = "assareh-benchmarking-subnet_c"
-  }
-}
+#   tags = {
+#     name = "assareh-benchmarking-subnet_c"
+#   }
+# }
 
-resource aws_subnet "subnet_d" {
-  vpc_id            = aws_vpc.benchmarking.id
-  availability_zone = "us-west-2d"
-  cidr_block        = "10.0.4.0/24"
+# resource aws_subnet "subnet_d" {
+#   vpc_id            = aws_vpc.benchmarking.id
+#   availability_zone = "us-west-2d"
+#   cidr_block        = "10.0.4.0/24"
 
-  tags = {
-    name = "assareh-benchmarking-subnet_d"
-  }
-}
+#   tags = {
+#     name = "assareh-benchmarking-subnet_d"
+#   }
+# }
 
 # resource aws_internet_gateway "benchmark" {
 #   vpc_id = aws_vpc.benchmarking.id
@@ -172,45 +172,45 @@ resource aws_subnet "subnet_d" {
 #   route_table_id = aws_route_table.benchmark.id
 # }
 
-resource aws_security_group "benchmark" {
-  name = "assareh-security-group"
+# resource aws_security_group "benchmark" {
+#   name = "assareh-security-group"
 
-  vpc_id = aws_vpc.benchmarking.id
+#   vpc_id = aws_vpc.benchmarking.id
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["76.93.151.110/32"]
-  }
+#   ingress {
+#     from_port   = 22
+#     to_port     = 22
+#     protocol    = "tcp"
+#     cidr_blocks = ["76.93.151.110/32"]
+#   }
 
-  egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
-    prefix_list_ids = []
-  }
+#   egress {
+#     from_port       = 0
+#     to_port         = 0
+#     protocol        = "-1"
+#     cidr_blocks     = ["0.0.0.0/0"]
+#     prefix_list_ids = []
+#   }
 
-  tags = {
-    Name = "assareh-security-group"
-  }
-}
+#   tags = {
+#     Name = "assareh-security-group"
+#   }
+# }
 
-resource aws_instance "benchmark" {
-  ami                         = data.aws_ami.ubuntu.id
-  instance_type               = var.instance_type_vault
-  key_name                    = var.key_name
-  associate_public_ip_address = true
-  subnet_id                   = aws_subnet.subnet_d.id
-  vpc_security_group_ids      = [aws_security_group.benchmark.id]
+# resource aws_instance "benchmark" {
+#   ami                         = data.aws_ami.ubuntu.id
+#   instance_type               = var.instance_type_vault
+#   key_name                    = var.key_name
+#   associate_public_ip_address = true
+#   subnet_id                   = aws_subnet.subnet_d.id
+#   vpc_security_group_ids      = [aws_security_group.benchmark.id]
 
-  tags = {
-    Name  = "assareh-benchmark-instance",
-    owner = var.owner,
-    ttl   = var.ttl
-  }
-}
+#   tags = {
+#     Name  = "assareh-benchmark-instance",
+#     owner = var.owner,
+#     ttl   = var.ttl
+#   }
+# }
 
 // We launch Vault into an ASG so that it can properly bring them up for us.
 # resource "aws_autoscaling_group" "vault" {
@@ -378,38 +378,38 @@ data "aws_iam_policy_document" "auto_discover_cluster" {
 }
 
 // Security group for Vault
-resource "aws_security_group" "vault" {
-  name        = "${var.vault_name_prefix}-sg"
-  description = "Vault servers"
-  vpc_id      = aws_vpc.benchmarking.id
-}
+# resource "aws_security_group" "vault" {
+#   name        = "${var.vault_name_prefix}-sg"
+#   description = "Vault servers"
+#   vpc_id      = aws_vpc.benchmarking.id
+# }
 
-resource "aws_security_group_rule" "vault_ssh" {
-  security_group_id = aws_security_group.vault.id
-  type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
-  cidr_blocks       = ["76.93.151.110/32"]
-}
+# resource "aws_security_group_rule" "vault_ssh" {
+#   security_group_id = aws_security_group.vault.id
+#   type              = "ingress"
+#   from_port         = 22
+#   to_port           = 22
+#   protocol          = "tcp"
+#   cidr_blocks       = ["76.93.151.110/32"]
+# }
 
-resource "aws_security_group_rule" "vault_external_egress_star" {
-  security_group_id = aws_security_group.vault.id
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
-}
+# resource "aws_security_group_rule" "vault_external_egress_star" {
+#   security_group_id = aws_security_group.vault.id
+#   type              = "egress"
+#   from_port         = 0
+#   to_port           = 0
+#   protocol          = "-1"
+#   cidr_blocks       = ["0.0.0.0/0"]
+# }
 
-resource "aws_security_group_rule" "vault_internal_icmp" {
-  security_group_id        = aws_security_group.vault.id
-  type                     = "ingress"
-  from_port                = 8
-  to_port                  = 0
-  protocol                 = "icmp"
-  source_security_group_id = aws_security_group.vault.id
-}
+# resource "aws_security_group_rule" "vault_internal_icmp" {
+#   security_group_id        = aws_security_group.vault.id
+#   type                     = "ingress"
+#   from_port                = 8
+#   to_port                  = 0
+#   protocol                 = "icmp"
+#   source_security_group_id = aws_security_group.vault.id
+# }
 
 # resource "aws_security_group_rule" "vault_external_egress" {
 #   security_group_id = aws_security_group.vault.id
@@ -420,91 +420,91 @@ resource "aws_security_group_rule" "vault_internal_icmp" {
 #   cidr_blocks       = ["0.0.0.0/0"]
 # }
 
-resource "aws_security_group_rule" "vault_internal_egress" {
-  security_group_id        = aws_security_group.vault.id
-  type                     = "egress"
-  from_port                = 8200
-  to_port                  = 8600
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.vault.id
-}
+# resource "aws_security_group_rule" "vault_internal_egress" {
+#   security_group_id        = aws_security_group.vault.id
+#   type                     = "egress"
+#   from_port                = 8200
+#   to_port                  = 8600
+#   protocol                 = "tcp"
+#   source_security_group_id = aws_security_group.vault.id
+# }
 
-resource "aws_security_group_rule" "vault_elb_access" {
-  security_group_id        = aws_security_group.vault.id
-  type                     = "ingress"
-  from_port                = 8200
-  to_port                  = 8200
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.vault_elb.id
-}
+# resource "aws_security_group_rule" "vault_elb_access" {
+#   security_group_id        = aws_security_group.vault.id
+#   type                     = "ingress"
+#   from_port                = 8200
+#   to_port                  = 8200
+#   protocol                 = "tcp"
+#   source_security_group_id = aws_security_group.vault_elb.id
+# }
 
-resource "aws_security_group_rule" "consul_elb_access" {
-  security_group_id        = aws_security_group.vault.id
-  type                     = "ingress"
-  from_port                = 8500
-  to_port                  = 8500
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.vault_elb.id
-}
+# resource "aws_security_group_rule" "consul_elb_access" {
+#   security_group_id        = aws_security_group.vault.id
+#   type                     = "ingress"
+#   from_port                = 8500
+#   to_port                  = 8500
+#   protocol                 = "tcp"
+#   source_security_group_id = aws_security_group.vault_elb.id
+# }
 
-resource "aws_security_group_rule" "vault_cluster" {
-  security_group_id        = aws_security_group.vault.id
-  type                     = "ingress"
-  from_port                = 8201
-  to_port                  = 8201
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.vault.id
-}
+# resource "aws_security_group_rule" "vault_cluster" {
+#   security_group_id        = aws_security_group.vault.id
+#   type                     = "ingress"
+#   from_port                = 8201
+#   to_port                  = 8201
+#   protocol                 = "tcp"
+#   source_security_group_id = aws_security_group.vault.id
+# }
 
-// This rule allows Consul RPC.
-resource "aws_security_group_rule" "consul_rpc" {
-  security_group_id        = aws_security_group.vault.id
-  type                     = "ingress"
-  from_port                = 8300
-  to_port                  = 8300
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.vault.id
-}
+# // This rule allows Consul RPC.
+# resource "aws_security_group_rule" "consul_rpc" {
+#   security_group_id        = aws_security_group.vault.id
+#   type                     = "ingress"
+#   from_port                = 8300
+#   to_port                  = 8300
+#   protocol                 = "tcp"
+#   source_security_group_id = aws_security_group.vault.id
+# }
 
-// This rule allows Consul Serf TCP.
-resource "aws_security_group_rule" "vault_consul_serf_tcp" {
-  security_group_id        = aws_security_group.vault.id
-  type                     = "ingress"
-  from_port                = 8301
-  to_port                  = 8302
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.vault.id
-}
+# // This rule allows Consul Serf TCP.
+# resource "aws_security_group_rule" "vault_consul_serf_tcp" {
+#   security_group_id        = aws_security_group.vault.id
+#   type                     = "ingress"
+#   from_port                = 8301
+#   to_port                  = 8302
+#   protocol                 = "tcp"
+#   source_security_group_id = aws_security_group.vault.id
+# }
 
-// This rule allows Consul Serf UDP.
-resource "aws_security_group_rule" "vault_consul_serf_udp" {
-  security_group_id        = aws_security_group.vault.id
-  type                     = "ingress"
-  from_port                = 8301
-  to_port                  = 8302
-  protocol                 = "udp"
-  source_security_group_id = aws_security_group.vault.id
-}
+# // This rule allows Consul Serf UDP.
+# resource "aws_security_group_rule" "vault_consul_serf_udp" {
+#   security_group_id        = aws_security_group.vault.id
+#   type                     = "ingress"
+#   from_port                = 8301
+#   to_port                  = 8302
+#   protocol                 = "udp"
+#   source_security_group_id = aws_security_group.vault.id
+# }
 
-// This rule allows Consul DNS.
-resource "aws_security_group_rule" "consul_dns_tcp" {
-  security_group_id        = aws_security_group.vault.id
-  type                     = "ingress"
-  from_port                = 8600
-  to_port                  = 8600
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.vault.id
-}
+# // This rule allows Consul DNS.
+# resource "aws_security_group_rule" "consul_dns_tcp" {
+#   security_group_id        = aws_security_group.vault.id
+#   type                     = "ingress"
+#   from_port                = 8600
+#   to_port                  = 8600
+#   protocol                 = "tcp"
+#   source_security_group_id = aws_security_group.vault.id
+# }
 
-// This rule allows Consul DNS.
-resource "aws_security_group_rule" "consul_dns_udp" {
-  security_group_id        = aws_security_group.vault.id
-  type                     = "ingress"
-  from_port                = 8600
-  to_port                  = 8600
-  protocol                 = "udp"
-  source_security_group_id = aws_security_group.vault.id
-}
+# // This rule allows Consul DNS.
+# resource "aws_security_group_rule" "consul_dns_udp" {
+#   security_group_id        = aws_security_group.vault.id
+#   type                     = "ingress"
+#   from_port                = 8600
+#   to_port                  = 8600
+#   protocol                 = "udp"
+#   source_security_group_id = aws_security_group.vault.id
+# }
 
 // Launch the ELB that is serving Vault. This has proper health checks
 // to only serve healthy, unsealed Vaults.
@@ -560,45 +560,45 @@ resource "aws_security_group_rule" "consul_dns_udp" {
 #   }
 # }
 
-resource "aws_security_group" "vault_elb" {
-  name        = "${var.vault_name_prefix}-elb"
-  description = "Vault ELB"
-  vpc_id      = aws_vpc.benchmarking.id
-}
+# resource "aws_security_group" "vault_elb" {
+#   name        = "${var.vault_name_prefix}-elb"
+#   description = "Vault ELB"
+#   vpc_id      = aws_vpc.benchmarking.id
+# }
 
-resource "aws_security_group_rule" "vault_elb_http" {
-  security_group_id = aws_security_group.vault_elb.id
-  type              = "ingress"
-  from_port         = 8200
-  to_port           = 8200
-  protocol          = "tcp"
-  cidr_blocks       = ["76.93.151.110/32"]
-}
+# resource "aws_security_group_rule" "vault_elb_http" {
+#   security_group_id = aws_security_group.vault_elb.id
+#   type              = "ingress"
+#   from_port         = 8200
+#   to_port           = 8200
+#   protocol          = "tcp"
+#   cidr_blocks       = ["76.93.151.110/32"]
+# }
 
-resource "aws_security_group_rule" "consul_elb_http" {
-  security_group_id = aws_security_group.vault_elb.id
-  type              = "ingress"
-  from_port         = 8500
-  to_port           = 8500
-  protocol          = "tcp"
-  cidr_blocks       = ["76.93.151.110/32"]
-}
+# resource "aws_security_group_rule" "consul_elb_http" {
+#   security_group_id = aws_security_group.vault_elb.id
+#   type              = "ingress"
+#   from_port         = 8500
+#   to_port           = 8500
+#   protocol          = "tcp"
+#   cidr_blocks       = ["76.93.151.110/32"]
+# }
 
-resource "aws_security_group_rule" "vault_elb_egress_to_vault" {
-  security_group_id        = aws_security_group.vault_elb.id
-  type                     = "egress"
-  from_port                = 8200
-  to_port                  = 8200
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.vault.id
-}
+# resource "aws_security_group_rule" "vault_elb_egress_to_vault" {
+#   security_group_id        = aws_security_group.vault_elb.id
+#   type                     = "egress"
+#   from_port                = 8200
+#   to_port                  = 8200
+#   protocol                 = "tcp"
+#   source_security_group_id = aws_security_group.vault.id
+# }
 
-resource "aws_security_group_rule" "vault_elb_egress_to_consul" {
-  security_group_id        = aws_security_group.vault_elb.id
-  type                     = "egress"
-  from_port                = 8500
-  to_port                  = 8500
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.vault.id
-}
+# resource "aws_security_group_rule" "vault_elb_egress_to_consul" {
+#   security_group_id        = aws_security_group.vault_elb.id
+#   type                     = "egress"
+#   from_port                = 8500
+#   to_port                  = 8500
+#   protocol                 = "tcp"
+#   source_security_group_id = aws_security_group.vault.id
+# }
 
