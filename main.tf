@@ -172,29 +172,28 @@ resource aws_route_table_association "subnet_d" {
   route_table_id = aws_route_table.benchmark.id
 }
 
-resource aws_security_group "benchmark" {
-  name = "assareh-security-group"
-
+// Security group for client
+resource "aws_security_group" "benchmark" {
+  name   = "assareh-security-group"
   vpc_id = aws_vpc.benchmarking.id
+}
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["76.93.151.110/32"]
-  }
+resource "aws_security_group_rule" "benchmark_ssh" {
+  security_group_id = aws_security_group.benchmark.id
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = ["76.93.151.110/32"]
+}
 
-  egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
-    prefix_list_ids = []
-  }
-
-  tags = {
-    Name = "assareh-security-group"
-  }
+resource "aws_security_group_rule" "benchmark_egress" {
+  security_group_id = aws_security_group.benchmark.id
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "benchmark_vault_elb" {
