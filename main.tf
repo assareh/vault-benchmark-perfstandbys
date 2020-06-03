@@ -11,15 +11,15 @@ resource "acme_registration" "reg" {
   email_address   = "assareh@hashicorp.com"
 }
 
-# resource "acme_certificate" "certificate" {
-#   account_key_pem           = acme_registration.reg.account_key_pem
-#   common_name               = data.aws_route53_zone.selected.name
-#   subject_alternative_names = [aws_elb.vault.dns_name]
+resource "acme_certificate" "certificate" {
+  account_key_pem           = acme_registration.reg.account_key_pem
+  common_name               = data.aws_route53_zone.selected.name
+  subject_alternative_names = [aws_elb.vault.dns_name]
 
-#   dns_challenge {
-#     provider = "route53"
-#   }
-# }
+  dns_challenge {
+    provider = "route53"
+  }
+}
 
 data "aws_route53_zone" "selected" {
   name = "andy.hashidemos.io."
