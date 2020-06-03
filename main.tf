@@ -26,13 +26,13 @@ data "aws_route53_zone" "selected" {
   name = "andy.hashidemos.io."
 }
 
-resource "aws_route53_record" "andy-hashidemos-io-CNAME" {
-  zone_id = data.aws_route53_zone.selected.zone_id
-  name    = "vault.${data.aws_route53_zone.selected.name}"
-  type    = "CNAME"
-  records = [aws_elb.vault.dns_name]
-  ttl     = "60"
-}
+# resource "aws_route53_record" "andy-hashidemos-io-CNAME" {
+#   zone_id = data.aws_route53_zone.selected.zone_id
+#   name    = "vault.${data.aws_route53_zone.selected.name}"
+#   type    = "CNAME"
+#   records = [aws_elb.vault.dns_name]
+#   ttl     = "60"
+# }
 
 resource "aws_iam_server_certificate" "elb_cert" {
   name_prefix       = "assareh-cert-"
