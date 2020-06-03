@@ -137,6 +137,13 @@ resource aws_security_group "hashicat" {
     cidr_blocks = ["76.93.151.110/32"]
   }
 
+  ingress {
+    from_port                = 8
+    to_port                  = 0
+    protocol                 = "icmp"
+    source_security_group_id = aws_security_group.vault.id
+  }
+
   egress {
     from_port       = 0
     to_port         = 0
