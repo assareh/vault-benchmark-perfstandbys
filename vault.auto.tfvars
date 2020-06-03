@@ -10,7 +10,7 @@ vault_name_prefix  = "assareh-benchmark-vault"
 consul_name_prefix = "assareh-benchmark-consul"
 
 elb_internal = true
-public_ip    = false
+public_ip    = true
 
 vault_nodes  = "3"
 consul_nodes = "3"

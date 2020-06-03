@@ -232,7 +232,7 @@ resource "aws_autoscaling_group" "vault" {
   health_check_grace_period = 15
   health_check_type         = "EC2"
   vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
-  # load_balancers            = [aws_elb.vault.id]
+  load_balancers            = [aws_elb.vault.id]
 
   tags = [
     {
@@ -291,7 +291,7 @@ resource "aws_autoscaling_group" "consul" {
   health_check_grace_period = 15
   health_check_type         = "EC2"
   vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
-  # load_balancers            = [aws_elb.consul.id]
+  load_balancers            = [aws_elb.consul.id]
 
   tags = [
     {
