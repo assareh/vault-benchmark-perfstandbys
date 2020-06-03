@@ -78,6 +78,16 @@ resource aws_subnet "subnet_c" {
   }
 }
 
+resource aws_subnet "subnet_d" {
+  vpc_id            = aws_vpc.benchmarking.id
+  availability_zone = "us-west-2d"
+  cidr_block        = "10.0.4.0/24"
+
+  tags = {
+    name = "assareh-benchmarking-subnet_d"
+  }
+}
+
 resource aws_internet_gateway "hashicat" {
   vpc_id = aws_vpc.benchmarking.id
 
@@ -108,6 +118,49 @@ resource aws_route_table_association "subnet_b" {
 resource aws_route_table_association "subnet_c" {
   subnet_id      = aws_subnet.subnet_c.id
   route_table_id = aws_route_table.hashicat.id
+}
+
+resource aws_route_table_association "subnet_d" {
+  subnet_id      = aws_subnet.subnet_d.id
+  route_table_id = aws_route_table.hashicat.id
+}
+
+resource aws_security_group "hashicat" {
+  name = "assareh-security-group"
+
+  vpc_id = aws_vpc.benchmarking.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["76.93.151.110/32"]
+  }
+
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+    prefix_list_ids = []
+  }
+
+  tags = {
+    Name = "assareh-security-group"
+  }
+}
+
+resource aws_instance "hashicat" {
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = var.instance_type_vault
+  key_name                    = var.key_name
+  associate_public_ip_address = true
+  subnet_id                   = aws_subnet.subnet_d.id
+  vpc_security_group_ids      = [aws_security_group.hashicat.id]
+
+  tags = {
+    Name = "assareh-hashicat-instance"
+  }
 }
 
 // We launch Vault into an ASG so that it can properly bring them up for us.
