@@ -14,7 +14,7 @@ resource "acme_registration" "reg" {
 resource "acme_certificate" "certificate" {
   account_key_pem           = acme_registration.reg.account_key_pem
   common_name               = trimsuffix(aws_route53_record.andy-hashidemos-io-CNAME.name, ".")
-  subject_alternative_names = [aws_elb.vault.dns_name]
+  # subject_alternative_names = [aws_elb.vault.dns_name]
 
   dns_challenge {
     provider = "route53"
