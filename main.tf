@@ -27,7 +27,7 @@ data "aws_route53_zone" "selected" {
 
 resource "aws_route53_record" "andy-hashidemos-io-CNAME" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = data.aws_route53_zone.selected.name
+  name    = "vault.${data.aws_route53_zone.selected.name}"
   type    = "CNAME"
   records = [aws_elb.vault.dns_name]
   ttl     = "60"
