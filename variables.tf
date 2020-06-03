@@ -46,7 +46,7 @@ variable "consul_server_config" {
   "client_addr": "0.0.0.0",
   "advertise_addr": "IP_ADDRESS",
   "bootstrap_expect": CONSUL_NODES,
-  "retry_join": ["provider=aws tag_key=ConsulAutoJoin tag_value=TAG_VALUE region=us-east-1"],
+  "retry_join": ["provider=aws tag_key=ConsulAutoJoin tag_value=TAG_VALUE region=us-west-2"],
   "enable_syslog": true,
   "service": {
     "name": "consul"
@@ -68,7 +68,7 @@ variable "consul_client_config" {
   "data_dir": "/opt/consul/data",
   "bind_addr": "IP_ADDRESS",
   "client_addr": "127.0.0.1",
-  "retry_join": ["provider=aws tag_key=ConsulAutoJoin tag_value=TAG_VALUE region=us-east-1"],
+  "retry_join": ["provider=aws tag_key=ConsulAutoJoin tag_value=TAG_VALUE region=us-west-2"],
   "enable_syslog": true,
   "service": {
     "name": "consul-client"
@@ -85,11 +85,11 @@ EOF
 // AWS settings
 //-------------------------------------------------------------------
 
-variable "ami" {
-  # Ubuntu 16.04, but could also use ami-059eeca93cf09eebd
-  default     = "ami-759bc50a"
-  description = "AMI for Vault instances"
-}
+# variable "ami" {
+#   # Ubuntu 16.04, but could also use ami-059eeca93cf09eebd
+#   default     = "ami-759bc50a"
+#   description = "AMI for Vault instances"
+# }
 
 variable "public_ip" {
   default     = true
@@ -97,17 +97,17 @@ variable "public_ip" {
 }
 
 variable "vault_name_prefix" {
-  default     = "mattpeters_vault"
+  default     = "assareh_vault"
   description = "prefix used in resource names"
 }
 
 variable "consul_name_prefix" {
-  default     = "mattpeters_consul"
+  default     = "assareh_consul"
   description = "prefix used in resource names"
 }
 
 variable "availability_zones" {
-  default     = "us-east-1a,us-east-1b,us-east-1c"
+  default     = "us-west-2a,us-west-2b,us-west-2c"
   description = "Availability zones for launching the Vault instances"
 }
 
