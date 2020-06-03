@@ -203,7 +203,7 @@ resource "aws_security_group_rule" "benchmark_vault_all" {
   from_port                = 0
   to_port                  = 0
   protocol                 = "-1"
-  source_security_group_id = aws_security_group.vault.id
+  source_security_group_id = aws_security_group.vault_elb.id
 }
 
 resource aws_instance "benchmark" {
