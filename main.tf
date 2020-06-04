@@ -610,7 +610,37 @@ resource "aws_elb" "vault" {
     owner = var.owner,
     ttl   = var.ttl
   }
+}
 
+resource "aws_elb" "vault_public" {
+  name                        = "${var.vault_name_prefix}-elb-pub"
+  connection_draining         = true
+  connection_draining_timeout = 400
+  internal                    = false
+  subnets                     = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
+  security_groups             = [aws_security_group.vault_elb.id]
+
+  listener {
+    instance_port     = 8200
+    instance_protocol = "http"
+    lb_port           = 8200
+    lb_protocol       = "https"
+    ssl_certificate_id = aws_iam_server_certificate.elb_cert.arn
+  }
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    timeout             = 5
+    target              = var.vault_elb_health_check
+    interval            = 15
+  }
+
+  tags = {
+    Name  = "assareh-vault-elb",
+    owner = var.owner,
+    ttl   = var.ttl
+  }
 }
 
 // Launch the ELB that is serving Consul. This has proper health checks
