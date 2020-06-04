@@ -365,6 +365,18 @@ data "aws_iam_policy_document" "instance_role" {
       identifiers = ["ec2.amazonaws.com"]
     }
   }
+
+  statement {
+    actions = [
+      "kms:DescribeKey",
+      "kms:Encrypt",
+      "kms:Decrypt",
+    ]
+
+    resources = [
+      aws_kms_key.vault.arn,
+    ]
+  }
 }
 
 resource "aws_iam_role_policy" "auto_discover_cluster" {
