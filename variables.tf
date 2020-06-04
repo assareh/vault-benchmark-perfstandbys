@@ -18,22 +18,6 @@ variable "consul_download_url" {
   description = "URL to download Consul"
 }
 
-variable "vault_config" {
-  description = "Configuration (text) for Vault"
-  default     = <<EOF
-listener "tcp" {
-  address     = "0.0.0.0:8200"
-  tls_disable = 1
-}
-  storage "consul" {
-  address = "127.0.0.1:8500"
-  path    = "vault/"
-}
-ui=true
-EOF
-
-}
-
 variable "consul_server_config" {
   description = "Configuration (text) for Consul"
   default     = <<EOF

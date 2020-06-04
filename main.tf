@@ -68,9 +68,9 @@ data "template_file" "install_vault" {
     install_unzip       = var.unzip_command
     vault_download_url  = var.vault_download_url
     consul_download_url = var.consul_download_url
-    vault_config        = var.vault_config
     consul_config       = var.consul_client_config
     tag_value           = var.auto_join_tag
+    kms_id              = aws_kms_key.vault.key_id
   }
 }
 

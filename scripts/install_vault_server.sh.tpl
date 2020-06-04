@@ -15,9 +15,29 @@ sudo chmod 0755 /usr/local/bin/vault
 sudo chown root:root /usr/local/bin/vault
 sudo setcap cap_ipc_lock=+ep /usr/local/bin/vault
 
+ADDRESS=$(ifconfig eth0 | grep -E -o "(25[0-4]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[01]?[0-9][0-9]?)" | head -n 1)
+
 # Setup the configuration
 cat <<EOF >/tmp/vault-config
-${vault_config}
+listener "tcp" {
+  address     = "0.0.0.0:8200"
+  tls_disable = 1
+}
+
+storage "consul" {
+  address = "127.0.0.1:8500"
+  path    = "vault/"
+}
+
+seal "awskms" {
+  region     = "us-west-2"
+  kms_key_id = "${kms_id}"
+}
+
+cluster_addr = "https://$ADDRESS:8201"
+api_addr = "http://$ADDRESS:8200"
+
+ui=true
 EOF
 sudo mkdir /etc/vault.d
 sudo mv /tmp/vault-config /etc/vault.d/vault-config.json
