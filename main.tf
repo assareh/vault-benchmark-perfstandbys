@@ -34,6 +34,14 @@ data "aws_route53_zone" "selected" {
 #   ttl     = "60"
 # }
 
+resource "aws_route53_record" "consul-andy-hashidemos-io-CNAME" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = "consul.${data.aws_route53_zone.selected.name}"
+  type    = "CNAME"
+  records = [aws_elb.consul.dns_name]
+  ttl     = "60"
+}
+
 resource "aws_iam_server_certificate" "elb_cert" {
   name_prefix      = "assareh-cert-"
   certificate_body = acme_certificate.certificate.certificate_pem
