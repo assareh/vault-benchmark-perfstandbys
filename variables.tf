@@ -113,9 +113,14 @@ variable "consul_elb_health_check" {
   description = "Health check for Consul servers"
 }
 
-variable "elb_internal" {
+variable "vault_elb_internal" {
   default     = false
-  description = "make ELB internal or external"
+  description = "make Vault ELB internal or external"
+}
+
+variable "consul_elb_internal" {
+  default     = false
+  description = "make Consul ELB internal or external"
 }
 
 variable "instance_type_vault" {

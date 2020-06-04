@@ -9,7 +9,8 @@ key_name           = "assareh-ec2"
 vault_name_prefix  = "assareh-benchmark-vault"
 consul_name_prefix = "assareh-benchmark-consul"
 
-elb_internal = true
+vault_elb_internal = true
+consul_elb_internal = false
 public_ip    = true
 
 vault_nodes  = "3"
