@@ -187,6 +187,15 @@ resource "aws_security_group_rule" "benchmark_ssh" {
   cidr_blocks       = ["76.93.151.110/32"]
 }
 
+resource "aws_security_group_rule" "benchmark_grafana" {
+  security_group_id = aws_security_group.benchmark.id
+  type              = "ingress"
+  from_port         = 3000
+  to_port           = 3000
+  protocol          = "tcp"
+  cidr_blocks       = ["76.93.151.110/32"]
+}
+
 resource "aws_security_group_rule" "benchmark_egress" {
   security_group_id = aws_security_group.benchmark.id
   type              = "egress"
