@@ -220,6 +220,21 @@ resource aws_instance "benchmark" {
   }
 }
 
+resource aws_instance "telemetry" {
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "t2.medium"
+  key_name                    = var.key_name
+  associate_public_ip_address = true
+  subnet_id                   = aws_subnet.subnet_d.id
+  vpc_security_group_ids      = [aws_security_group.benchmark.id]
+
+  tags = {
+    Name  = "assareh-telemetry-instance",
+    owner = var.owner,
+    ttl   = var.ttl
+  }
+}
+
 // We launch Vault into an ASG so that it can properly bring them up for us.
 resource "aws_autoscaling_group" "vault" {
   name                 = aws_launch_configuration.vault.name

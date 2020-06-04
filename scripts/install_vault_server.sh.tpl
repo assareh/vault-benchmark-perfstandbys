@@ -122,3 +122,6 @@ sudo systemctl start consul
 # Start Vault
 sudo systemctl enable vault
 sudo systemctl start vault
+
+# Load bash profile
+echo "export VAULT_ADDR=http://127.0.0.1:8200" >> /home/ubuntu/.profile
