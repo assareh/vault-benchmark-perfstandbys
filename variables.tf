@@ -37,6 +37,10 @@ variable "consul_server_config" {
   },
   "performance": {
     "raft_multiplier": 1
+  },
+  "telemetry": {
+    "dogstatsd_addr": "localhost:8125",
+    "disable_hostname": true
   }
 }
 EOF
@@ -59,6 +63,10 @@ variable "consul_client_config" {
   },
   "performance": {
     "raft_multiplier": 1
+  },
+  "telemetry": {
+    "dogstatsd_addr": "localhost:8125",
+    "disable_hostname": true
   }
 }
 EOF

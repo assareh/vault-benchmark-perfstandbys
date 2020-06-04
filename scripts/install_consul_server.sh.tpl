@@ -54,3 +54,18 @@ sudo mkdir -pm 0755 /opt/consul/data
 # Start Consul
 sudo systemctl enable consul
 sudo systemctl start consul
+
+# Telegraf
+# add the influxdata signing key
+curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
+# configure a package repo
+source /etc/lsb-release
+echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+# install Telegraf and start the daemon
+sudo apt-get update && sudo apt-get install telegraf
+sudo systemctl enable telegraf
+sudo systemctl start telegraf
+
+sudo wget https://raw.githubusercontent.com/tradel/vault-consul-monitoring/master/vault/telegraf.conf
+sudo mv telegraf.conf /etc/telegraf/.
+sudo systemctl restart telegraf
