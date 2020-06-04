@@ -71,6 +71,7 @@ data "template_file" "install_vault" {
     consul_config       = var.consul_client_config
     tag_value           = var.auto_join_tag
     kms_id              = aws_kms_key.vault.key_id
+    statsbox            = aws_instance.telemetry.private_ip
   }
 }
 
@@ -83,6 +84,7 @@ data "template_file" "install_consul" {
     consul_config       = var.consul_server_config
     tag_value           = var.auto_join_tag
     consul_nodes        = var.consul_nodes
+    statsbox            = aws_instance.telemetry.private_ip
   }
 }
 
