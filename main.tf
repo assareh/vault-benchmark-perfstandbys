@@ -538,6 +538,13 @@ resource "aws_elb" "vault" {
     target              = var.vault_elb_health_check
     interval            = 15
   }
+
+  tags = {
+    Name  = "assareh-vault-elb",
+    owner = var.owner,
+    ttl   = var.ttl
+  }
+
 }
 
 // Launch the ELB that is serving Consul. This has proper health checks
@@ -564,6 +571,13 @@ resource "aws_elb" "consul" {
     target              = var.consul_elb_health_check
     interval            = 15
   }
+
+  tags = {
+    Name  = "assareh-consul-elb",
+    owner = var.owner,
+    ttl   = var.ttl
+  }
+
 }
 
 resource "aws_security_group" "vault_elb" {

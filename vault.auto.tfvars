@@ -19,7 +19,7 @@ consul_nodes = "3"
 vault_download_url = "https://releases.hashicorp.com/vault/1.4.2+ent/vault_1.4.2+ent_linux_amd64.zip"
 
 # This downloads Consul Enterprise by default
-consul_download_url = "https://releases.hashicorp.com/consul/1.7.3/consul_1.7.3_linux_amd64.zip"
+consul_download_url = "https://releases.hashicorp.com/consul/1.7.3+ent/consul_1.7.3+ent_linux_amd64.zip"
 
 # Used to auto-join Consul servers into cluster
 auto_join_tag = "assareh-benchmark-cluster"
