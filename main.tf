@@ -26,13 +26,13 @@ data "aws_route53_zone" "selected" {
   name = "andy.hashidemos.io."
 }
 
-# resource "aws_route53_record" "andy-hashidemos-io-CNAME" {
-#   zone_id = data.aws_route53_zone.selected.zone_id
-#   name    = "vault.${data.aws_route53_zone.selected.name}"
-#   type    = "CNAME"
-#   records = [aws_elb.vault.dns_name]
-#   ttl     = "60"
-# }
+resource "aws_route53_record" "vault-andy-hashidemos-io-CNAME" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = "vault.${data.aws_route53_zone.selected.name}"
+  type    = "CNAME"
+  records = [aws_elb.vault_public.dns_name]
+  ttl     = "60"
+}
 
 resource "aws_route53_record" "consul-andy-hashidemos-io-CNAME" {
   zone_id = data.aws_route53_zone.selected.zone_id
@@ -276,7 +276,7 @@ resource "aws_autoscaling_group" "vault" {
   health_check_grace_period = 15
   health_check_type         = "EC2"
   vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
-  load_balancers            = [aws_elb.vault.id]
+  load_balancers            = [aws_elb.vault.id, aws_elb.vault_public.id]
 
   tags = [
     {
