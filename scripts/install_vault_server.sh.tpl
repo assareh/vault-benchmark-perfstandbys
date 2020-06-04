@@ -15,7 +15,7 @@ sudo chmod 0755 /usr/local/bin/vault
 sudo chown root:root /usr/local/bin/vault
 sudo setcap cap_ipc_lock=+ep /usr/local/bin/vault
 
-ADDRESS=$(ifconfig eth0 | grep -E -o "(25[0-4]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[01]?[0-9][0-9]?)" | head -n 1)
+ADDRESS=$(ifconfig ens5 | grep -E -o "(25[0-4]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-4]|2[0-4][0-9]|[01]?[0-9][0-9]?)" | head -n 1)
 
 # Setup the configuration
 cat <<EOF >/tmp/vault-config
