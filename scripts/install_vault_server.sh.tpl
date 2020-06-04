@@ -201,7 +201,7 @@ cat <<EOF >/tmp/telegraf-config
   # no configuration
 
 [[inputs.net]]
-  interfaces = ["enp0s*"]
+  interfaces = ["ens*"]
 
 [[inputs.netstat]]
   # no configuration
