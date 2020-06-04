@@ -216,6 +216,16 @@ resource "aws_security_group_rule" "benchmark_vault_elb" {
   source_security_group_id = aws_security_group.vault_elb.id
 }
 
+// For stats
+resource "aws_security_group_rule" "stats_rule_ingress" {
+  security_group_id        = aws_security_group.benchmark.id
+  type                     = "ingress"
+  from_port                = 8086
+  to_port                  = 8086
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.vault.id
+}
+
 resource aws_instance "benchmark" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type_vault
@@ -541,6 +551,16 @@ resource "aws_security_group_rule" "consul_dns_udp" {
   to_port                  = 8600
   protocol                 = "udp"
   source_security_group_id = aws_security_group.vault.id
+}
+
+// For stats
+resource "aws_security_group_rule" "stats_rule" {
+  security_group_id        = aws_security_group.vault.id
+  type                     = "egress"
+  from_port                = 8086
+  to_port                  = 8086
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.benchmark.id
 }
 
 // Launch the ELB that is serving Vault. This has proper health checks
