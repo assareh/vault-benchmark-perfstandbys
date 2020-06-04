@@ -569,7 +569,7 @@ resource "aws_elb" "vault" {
   name                        = "${var.vault_name_prefix}-elb"
   connection_draining         = true
   connection_draining_timeout = 400
-  internal                    = var.elb_internal
+  internal                    = var.vault_elb_internal
   subnets                     = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
   security_groups             = [aws_security_group.vault_elb.id]
 
@@ -611,7 +611,7 @@ resource "aws_elb" "consul" {
   name                        = "${var.consul_name_prefix}-elb"
   connection_draining         = true
   connection_draining_timeout = 400
-  internal                    = var.elb_internal
+  internal                    = var.consul_elb_internal
   subnets                     = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
   security_groups             = [aws_security_group.vault_elb.id]
 
