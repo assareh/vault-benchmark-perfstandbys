@@ -9,9 +9,9 @@ key_name           = "assareh-ec2"
 vault_name_prefix  = "assareh-benchmark-vault"
 consul_name_prefix = "assareh-benchmark-consul"
 
-vault_elb_internal = true
+vault_elb_internal  = true
 consul_elb_internal = false
-public_ip    = true
+public_ip           = true
 
 vault_nodes  = "3"
 consul_nodes = "3"
@@ -26,4 +26,4 @@ consul_download_url = "https://releases.hashicorp.com/consul/1.7.3+ent/consul_1.
 auto_join_tag = "assareh-benchmark-cluster"
 
 # These are only needed for HashiCorp SEs
-ttl   = "-1"
+ttl = "-1"

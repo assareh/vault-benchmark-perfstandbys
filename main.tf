@@ -256,6 +256,7 @@ resource aws_instance "telemetry" {
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.subnet_a.id
   vpc_security_group_ids      = [aws_security_group.benchmark.id]
+  iam_instance_profile        = aws_iam_instance_profile.telemetry_profile.name
 
   tags = {
     Name  = "assareh-telemetry-instance",
@@ -621,10 +622,10 @@ resource "aws_elb" "vault_public" {
   security_groups             = [aws_security_group.vault_elb.id]
 
   listener {
-    instance_port     = 8200
-    instance_protocol = "http"
-    lb_port           = 8200
-    lb_protocol       = "https"
+    instance_port      = 8200
+    instance_protocol  = "http"
+    lb_port            = 8200
+    lb_protocol        = "https"
     ssl_certificate_id = aws_iam_server_certificate.elb_cert.arn
   }
 
@@ -764,3 +765,64 @@ resource "aws_kms_alias" "vault" {
   target_key_id = aws_kms_key.vault.key_id
 }
 
+resource "aws_iam_instance_profile" "telemetry_profile" {
+  name_prefix = var.vault_name_prefix
+  role        = aws_iam_role.instance_role.name
+}
+
+resource "aws_iam_role_policy" "telemetry" {
+  name   = "${var.vault_name_prefix}-telemetry"
+  role   = aws_iam_role.instance_role.id
+  policy = data.aws_iam_policy_document.cloudwatch.json
+}
+
+data "aws_iam_policy_document" "cloudwatch" {
+  statement {
+    sid    = "AllowReadingMetricsFromCloudWatch"
+    effect = "Allow"
+
+    actions = [
+      "cloudwatch:DescribeAlarmsForMetric",
+      "cloudwatch:DescribeAlarmHistory",
+      "cloudwatch:DescribeAlarms",
+      "cloudwatch:ListMetrics",
+      "cloudwatch:GetMetricStatistics",
+      "cloudwatch:GetMetricData",
+    ]
+
+    resources = ["*"]
+  }
+  statement {
+    sid    = "AllowReadingLogsFromCloudWatch"
+    effect = "Allow"
+
+    actions = [
+      "logs:DescribeLogGroups",
+      "logs:GetLogGroupFields",
+      "logs:StartQuery",
+      "logs:StopQuery",
+      "logs:GetQueryResults",
+      "logs:GetLogEvents",
+    ]
+
+    resources = ["*"]
+  }
+  statement {
+    sid    = "AllowReadingTagsInstancesRegionsFromEC2"
+    effect = "Allow"
+
+    actions = [
+      "ec2:DescribeTags",
+      "ec2:DescribeInstances",
+      "ec2:DescribeRegions",
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid    = "AllowReadingResourcesForTags"
+    effect = "Allow"
+
+    actions   = ["tag:GetResources", ]
+    resources = ["*"]
+  }
+}
