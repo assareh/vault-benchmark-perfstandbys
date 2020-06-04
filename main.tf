@@ -657,3 +657,14 @@ resource "aws_security_group_rule" "vault_elb_benchmark_egress" {
   protocol                 = "-1"
   source_security_group_id = aws_security_group.benchmark.id
 }
+
+resource "aws_kms_key" "vault" {
+  description             = "Vault unseal key"
+  deletion_window_in_days = 10
+}
+
+resource "aws_kms_alias" "vault" {
+  name          = "alias/assareh-vault-perf"
+  target_key_id = aws_kms_key.vault.key_id
+}
+
