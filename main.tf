@@ -236,7 +236,7 @@ resource "aws_security_group_rule" "stats_rule_ingress" {
 
 resource aws_instance "benchmark" {
   ami                         = data.aws_ami.ubuntu.id
-  instance_type               = var.instance_type_vault
+  instance_type               = "c5.xlarge"
   key_name                    = var.key_name
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.subnet_d.id

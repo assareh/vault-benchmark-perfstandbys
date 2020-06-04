@@ -236,3 +236,5 @@ sudo systemctl restart telegraf
 
 # Load bash profile
 echo "export VAULT_ADDR=http://127.0.0.1:8200" >> /home/ubuntu/.profile
+vault -autocomplete-install
+consul -autocomplete-install

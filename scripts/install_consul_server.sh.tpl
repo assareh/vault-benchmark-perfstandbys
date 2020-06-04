@@ -160,3 +160,5 @@ cat <<EOF >/tmp/telegraf-config
 EOF
 sudo mv /tmp/telegraf-config /etc/telegraf/telegraf.conf
 sudo systemctl restart telegraf
+
+consul -autocomplete-install
