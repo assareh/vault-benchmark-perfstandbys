@@ -13,7 +13,7 @@ vault_elb_internal  = true
 consul_elb_internal = false
 public_ip           = true
 
-vault_nodes  = "3"
+vault_nodes  = "7"
 consul_nodes = "3"
 
 # This downloads Vault Enterprise by default

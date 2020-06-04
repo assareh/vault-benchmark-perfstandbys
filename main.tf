@@ -235,6 +235,7 @@ resource "aws_security_group_rule" "stats_rule_ingress" {
 }
 
 resource aws_instance "benchmark" {
+  count = 2
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = "c5.xlarge"
   key_name                    = var.key_name
@@ -273,7 +274,7 @@ resource "aws_autoscaling_group" "vault" {
   #   min_size = "${var.vault_nodes}"
   min_size                  = 1
   max_size                  = var.vault_nodes
-  desired_capacity          = var.vault_nodes
+  desired_capacity          = 1
   health_check_grace_period = 15
   health_check_type         = "EC2"
   vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id, aws_subnet.subnet_c.id]
