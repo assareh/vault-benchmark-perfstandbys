@@ -225,7 +225,7 @@ resource aws_instance "telemetry" {
   instance_type               = "t2.medium"
   key_name                    = var.key_name
   associate_public_ip_address = true
-  subnet_id                   = aws_subnet.subnet_d.id
+  subnet_id                   = aws_subnet.subnet_a.id
   vpc_security_group_ids      = [aws_security_group.benchmark.id]
 
   tags = {
