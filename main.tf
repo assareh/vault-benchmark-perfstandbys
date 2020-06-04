@@ -701,15 +701,6 @@ resource "aws_security_group_rule" "vault_elb_http_3" {
   source_security_group_id = aws_security_group.benchmark.id
 }
 
-resource "aws_security_group_rule" "vault_elb_http_2" {
-  security_group_id        = aws_security_group.vault_elb.id
-  type                     = "ingress"
-  from_port                = 8210
-  to_port                  = 8210
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.benchmark.id
-}
-
 resource "aws_security_group_rule" "consul_elb_http" {
   security_group_id = aws_security_group.vault_elb.id
   type              = "ingress"
