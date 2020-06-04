@@ -163,3 +163,6 @@ variable "auto_join_tag" {
   description = "value of ConsulAutoJoin tag used by Consul cluster"
 }
 
+variable "my_ip" {
+  description = "an IP address to allow traffic from"
+}

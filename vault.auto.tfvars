@@ -25,5 +25,4 @@ consul_download_url = "https://releases.hashicorp.com/consul/1.7.3+ent/consul_1.
 auto_join_tag = "assareh-benchmark-cluster"
 
 # These are only needed for HashiCorp SEs
-owner = "assareh@hashicorp.com"
 ttl   = "-1"

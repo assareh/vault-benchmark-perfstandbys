@@ -186,7 +186,7 @@ resource "aws_security_group_rule" "benchmark_ssh" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = ["76.93.151.110/32"]
+  cidr_blocks       = [var.my_ip]
 }
 
 resource "aws_security_group_rule" "benchmark_grafana" {
@@ -195,7 +195,7 @@ resource "aws_security_group_rule" "benchmark_grafana" {
   from_port         = 3000
   to_port           = 3000
   protocol          = "tcp"
-  cidr_blocks       = ["76.93.151.110/32"]
+  cidr_blocks       = [var.my_ip]
 }
 
 resource "aws_security_group_rule" "benchmark_egress" {
@@ -446,7 +446,7 @@ resource "aws_security_group_rule" "vault_ssh" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = ["76.93.151.110/32"]
+  cidr_blocks       = [var.my_ip]
 }
 
 resource "aws_security_group_rule" "vault_external_egress_star" {
@@ -650,7 +650,7 @@ resource "aws_security_group_rule" "vault_elb_http" {
   from_port         = 8200
   to_port           = 8200
   protocol          = "tcp"
-  cidr_blocks       = ["76.93.151.110/32"]
+  cidr_blocks       = [var.my_ip]
 }
 
 resource "aws_security_group_rule" "vault_elb_http_3" {
@@ -677,7 +677,7 @@ resource "aws_security_group_rule" "consul_elb_http" {
   from_port         = 8500
   to_port           = 8500
   protocol          = "tcp"
-  cidr_blocks       = ["76.93.151.110/32"]
+  cidr_blocks       = [var.my_ip]
 }
 
 resource "aws_security_group_rule" "vault_elb_egress_to_vault" {
