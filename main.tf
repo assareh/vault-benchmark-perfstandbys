@@ -235,7 +235,7 @@ resource "aws_security_group_rule" "stats_rule_ingress" {
 }
 
 resource aws_instance "benchmark" {
-  count = 2
+  count                       = 2
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = "c5.xlarge"
   key_name                    = var.key_name
